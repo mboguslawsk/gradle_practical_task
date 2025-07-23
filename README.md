@@ -4,9 +4,13 @@
 
 Done.
 
+---
+
 ## 2. ​​Go to https://github.com/spring-projects/spring-petclinic, fork it, and clone the forked repo.
 
 Done.
+
+--
 
 ## 3. Check what tasks are available for the project.
 
@@ -20,6 +24,8 @@ Done.
 
 <p align="center"> <img src="img/img1.png" alt="Img" width="80%"> </p>
 
+---
+
 ## 4. Run all available project tests.
 
 **Command:**
@@ -32,7 +38,7 @@ Done.
 
 <p align="center"> <img src="img/img2.png" alt="Img" width="80%"> </p>
 
-On the macine I have installed Java 21, so I just replaced version in the build.gradle from 17 to 21 instead and it works fine:
+On the system had Java 21 installed, so the fix was updating the Java version in `build.gradle`:
 
 ```java
 java {
@@ -43,6 +49,8 @@ java {
 ```
 
 <p align="center"> <img src="img/img3.png" alt="Img" width="80%"> </p>
+
+---
 
 ## 5. Build the project and run it, and verify it’s available on the localhost in the browser.
 
@@ -67,6 +75,7 @@ To run project we can use two commands: `run` or `bootRun`. The difference is th
 
 <p align="center"> <img src="img/img5.png" alt="Img" width="80%"> </p>
 
+---
 
 ## 6. Perform the cleanup.
 
@@ -77,21 +86,23 @@ To run project we can use two commands: `run` or `bootRun`. The difference is th
 ```
 **Result:**
 
-After the command execution, web-site stopped be available.
+After cleanup, the application is no longer available in the browser.
 
+---
 
 ## 7. Explore gradle-related files. Identify which gradle file defines the project name and change it. Build the project again and verify the new project name is being used (you need to find .jar files).
 
-Name of the project is located in the `settings.gradle` file.
+The project name is defined in `settings.gradle`:
 
 ```
 rootProject.name = 'spring-petclinic'
 ```
 
-After changing the value of the `rootProject.name` variable and project rebuilding, Gradle generated ".jar" file with the new name:
+After changing the name and rebuilding the project, Gradle creates a `.jar` file using the new project name:
 
 <p align="center"> <img src="img/img6.png" alt="Img" width="80%"> </p>
 
+---
 
 ## 8. Create an additional custom task, which depends on the build task (so by calling this task the build and test tasks will also be executed). It should open the browser with generated test results.
 
@@ -113,19 +124,58 @@ task testReport(dependsOn: build) {
 
 <p align="center"> <img src="img/img7.png" alt="Img" width="80%"> </p>
 
+---
 
 ## 9. Add the dynamic versioning to your project using the commonly used axion-release-plugin (GitHub - allegro/axion-release-plugin: Gradle release & version management plugin.). Check the Version your project (Gradle best practice tip #5) to find the tutorial on how to do this.
 
+To check the version, inspect the generated `.jar` file — e.g., `grid-petclinic-3.5.0.jar`.
+
+You *can* hardcode the version in `build.gradle`:
+
+```
+version = "0.1.0"
+```
+
+But this is not ideal. Instead, use the [Axion Release Plugin](https://github.com/allegro/axion-release-plugin):
+
+```
+plugins {
+  ...
+
+  id 'pl.allegro.tech.build.axion-release' version '1.13.2'
+}
+
+...
+
+version = scmVersion.version
+
+...
+```
+
+---
 
 ## 10. Check the new available commands after the plugin addition. Using these new commands, check the current project version. Then add and commit some changes to the project and make the project release. Check the current version one more time and git tags available. Note the difference between SNAPSHOT and release versions.
 
+After that some additional tasks will appear, like `currentVersion`:
+
+<p align="center"> <img src="img/img8.png" alt="Img" width="50%"> </p>
+
+Encountered an SSH athorization error:
+
+<p align="center"> <img src="img/img9.png" alt="Img" width="50%"> </p>
+
+Hmm, SSH key worked fine before. Why it's not authorized?
+After some research I found that this could be a plugin-related bug:
+
+https://github.com/allegro/axion-release-plugin/issues/270
+
+---
 
 ## 11. Perform the cleanup.
 
 
-Hint: you may need the following documentation while working on the practice task:
+**Command:**
 
-Authoring Tasks
-The Java Plugin
-Version your project (Gradle best practice tip #5)
-Gradle task to open a url in the default browser - Stack Overflow
+```bash
+./gradlew clean
+```
